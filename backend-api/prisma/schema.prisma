@@ -1,0 +1,89 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum role{
+  admin
+  teknisi
+  umum
+}
+
+model User{
+  id_user Int @id @default(autoincrement())
+  nama_pengguna String
+  sandi String
+  email String @unique
+  peran role  
+
+  reports Report[] //satu user dapat membuat banyak laporan
+  reportLog ReportLog[] //satu user dapat melihat banyak report log
+}
+
+enum prioritas_laporan{
+  urgensi
+  sedang
+  rendah
+}
+
+enum jenis_fasilitas{
+  elektronik
+  non_elektronik
+  kebersihan
+  infrastruktur
+  lainnya
+}
+
+model Facilities{
+  id_facilities Int @id @default(autoincrement())  
+  nama String
+  kode String
+  lokasi String
+  jenis jenis_fasilitas
+  deskripsi String
+  prioritas prioritas_laporan
+
+  reports Report[] //satu fasilitas bisa mendapat banyak laporan
+}
+
+enum status_laporan{
+  diverifikasi
+  diproses
+  dilaporkan
+}
+
+model Report{
+  id_report Int @id @default(autoincrement())
+  id_pengguna Int
+  id_fasilitas Int
+  deskripsi String
+  status status_laporan @default(dilaporkan)
+  tanggal_laporan DateTime  
+  gambar String?
+
+  pengguna User @relation(fields: [id_pengguna], references: [id_user], onDelete: Cascade)
+  fasilitas Facilities @relation(fields: [id_fasilitas], references: [id_facilities], onDelete: Cascade)
+  reportLog ReportLog[]  //satu laporan dapat memiliki banyak report log
+}
+
+model ReportLog{
+  id_report_log Int @id @default(autoincrement())
+  id_laporan Int
+  id_pengguna Int
+  status String
+  diubah_pada DateTime
+  catatan String
+
+  laporan Report @relation(fields: [id_laporan], references: [id_report], onDelete: Cascade)
+  pengguna User @relation(fields: [id_pengguna], references: [id_user], onDelete: Cascade)
+}
