@@ -58,13 +58,13 @@ export default function UserDashboard() {
           </h3>
           <p className="text-sm text-gray-600">
             Laporkan kerusakan fasilitas kampus yang Anda temui.
-          </p>
-          <Button
-            onClick={() => router.push("/report")}
-            className="mt-4 w-full bg-cyan-600 hover:bg-cyan-700 text-white"
+          </p>         
+          <Link
+            href="/umum/report/create"
+            className="block mt-4 w-full text-center bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-md"
           >
-            Laporkan Sekarang
-          </Button>
+            Laporan Baru
+          </Link>
         </div>
 
         <div className="bg-white shadow-lg rounded-xl p-6 border border-cyan-100">
@@ -74,24 +74,14 @@ export default function UserDashboard() {
           <p className="text-sm text-gray-600">
             Pantau perkembangan dari laporan-laporan Anda sebelumnya.
           </p>
-          <Button
-            onClick={() => router.push("/history")}
-            className="mt-4 w-full bg-cyan-600 hover:bg-cyan-700 text-white"
+          
+          <Link
+            href="/umum/riwayat"
+            className="block mt-4 w-full text-center bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-md"
           >
             Riwayat Laporan
-          </Button>
+          </Link>
         </div>
-
-        {/* <div className="bg-white shadow-lg rounded-xl p-6 border border-cyan-100">
-          <h3 className="text-lg font-semibold text-cyan-800 mb-2">Profil Saya</h3>
-          <p className="text-sm text-gray-600">Edit informasi akun dan ubah kata sandi Anda.</p>
-          <Button
-            onClick={() => router.push('/profile')}
-            className="mt-4 w-full bg-cyan-600 hover:bg-cyan-700 text-white"
-          >
-            Edit Profil
-          </Button>
-        </div> */}
       </div>
     </div>
   );

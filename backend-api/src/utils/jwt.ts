@@ -1,4 +1,4 @@
-import { sign } from "jsonwebtoken";
+import { sign, verify } from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET || "123456";
 export const generateToken = async (payload: Record<string, string | number | Date>) => {
@@ -7,3 +7,11 @@ export const generateToken = async (payload: Record<string, string | number | Da
 
     return token;
 }
+
+export const verifyToken = (token: string) => {
+    try {
+      return verify(token, JWT_SECRET);
+    } catch (error) {
+      return null;
+    }
+};
