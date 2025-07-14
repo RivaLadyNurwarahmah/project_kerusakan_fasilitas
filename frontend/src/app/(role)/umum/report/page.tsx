@@ -49,7 +49,7 @@ export default function ReportListPage() {
               key={report.id_report}
               className="bg-white shadow-md rounded-xl p-4 hover:shadow-lg transition"
             >
-              <div className="mb-2 text-sm text-gray-500">Laporan #{index + 1}</div>
+              <div className="mb-2 text-sm text-gray-500">Laporan {index + 1}</div>
               <h2 className="text-lg font-semibold text-cyan-700 mb-1">
                 {report.fasilitas.nama}
               </h2>

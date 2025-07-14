@@ -9,16 +9,20 @@ export default function Header() {
         Sistem Pelaporan Fasilitas Kampus
       </h1>
 
-      <nav className="space-x-4 text-sm sm:text-base">
-        <Link href="/" className="hover:underline hover:text-cyan-200 transition">
-          Beranda
-        </Link>
-        <Link href="/dashboard/report" className="hover:underline hover:text-cyan-200 transition">
-          Laporan
-        </Link>
-        <Link href="/dashboard/history" className="hover:underline hover:text-cyan-200 transition">
-          Riwayat
-        </Link>
+      <nav className="space-x-4 text-sm sm:text-base">      
+          <Link
+            href="/profil"
+            className="hover:underline hover:text-white-800 text-white font-semibold px-4 py-2 rounded-md"
+          >
+            Profil
+          </Link>
+
+          <Link
+            href="/"
+            className="hover:underline hover:text-white-800 text-white font-semibold px-4 py-2 rounded-md"
+          >
+            Logout
+          </Link>      
       </nav>
     </header>
   );

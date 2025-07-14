@@ -26,38 +26,43 @@ export const authenticateUser = (
 };
 
 export const requireAdmin = (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    // @ts-ignore
-    if (req.user?.role !== "admin") {
-      return res.status(403).json({ message: "Hanya admin yang boleh mengakses" });
-    }
-    next();
-  };
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  // @ts-ignore
+  if (req.user?.role !== "admin") {
+    return res
+      .status(403)
+      .json({ message: "Hanya admin yang boleh mengakses" });
+  }
+  next();
+};
 
-  export const requireTeknisi = (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    // @ts-ignore
-    if (req.user?.role !== "teknisi") {
-      return res.status(403).json({ message: "Hanya teknisi yang boleh mengakses" });
-    }
-    next();
-  };
+export const requireTeknisi = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  // @ts-ignore
+  if (req.user?.role !== "teknisi") {
+    return res
+      .status(403)
+      .json({ message: "Hanya teknisi yang boleh mengakses" });
+  }
+  next();
+};
 
-  export const requireUmum = (
-    req: Request,
-    res: Response,
-    next: NextFunction
-  ) => {
-    // @ts-ignore
-    if (req.user?.role !== "umum") {
-      return res.status(403).json({ message: "Hanya pengguna umum yang boleh mengakses" });
-    }
-    next();
-  };
-  
+export const requireUmum = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  // @ts-ignore
+  if (req.user?.role !== "umum") {
+    return res
+      .status(403)
+      .json({ message: "Hanya pengguna umum yang boleh mengakses" });
+  }
+  next();
+};
