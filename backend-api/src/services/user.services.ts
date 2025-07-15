@@ -22,6 +22,18 @@ export async function getAllUserService() {
   return users
 }
 
+export async function getTeknisiService() {
+    return await prisma.user.findMany({
+        where: {
+            peran: "teknisi"
+        },
+        include: {
+            reports: true,
+            reportLog: true
+        }
+    });
+}
+
 export async function createUserServices(data: {  
   nama_pengguna: string,
   sandi: string,

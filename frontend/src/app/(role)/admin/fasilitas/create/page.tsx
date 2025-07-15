@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 
 export default function CreateReportPage() {
@@ -14,7 +14,6 @@ export default function CreateReportPage() {
     prioritas: "",
   });
 
-  const [preview, setPreview] = useState<string | null>(null);
   const [error, setError] = useState("");
 
   const handleChange = (
@@ -26,41 +25,31 @@ export default function CreateReportPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setFormData((prev) => ({ ...prev, gambar: file }));
-      setPreview(URL.createObjectURL(file));
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    const user = JSON.parse(localStorage.getItem("user")!);
-    const form = new FormData();
-    form.append("nama", user.nama);
-    form.append("kode", formData.kode);
-    form.append("lokasi", formData.lokasi);
-    form.append("jenis", formData.jenis);
-    form.append("deskripsi", formData.deskripsi);
-    form.append("prioritas", formData.prioritas);
 
     try {
-      const res = await fetch("http://localhost:1212/fasilitas", {
+      const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+      const res = await fetch("http://localhost:1212/facilities", {
         method: "POST",
-        body: form,
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
       });
 
       const data = await res.json();
-      if (data.success) {
+
+      if (res.ok && data.success) {
         router.push("/admin/fasilitas");
       } else {
         setError(data.message || "Gagal menambahkan fasilitas");
       }
     } catch (err) {
-        console.log(err);
-        setError("Terjadi kesalahan saat menambahkan fasilitas");
+      console.error(err);
+      setError("Terjadi kesalahan saat menambahkan fasilitas");
     }
   };
 
@@ -135,7 +124,7 @@ export default function CreateReportPage() {
           >
             <option value="">-- Pilih Jenis --</option>
             <option value="elektronik">Elektronik</option>
-            <option value="non-elektronik">Non-Elektronik</option>
+            <option value="non_elektronik">Non-Elektronik</option>
             <option value="lainnya">Lainnya</option>
           </select>
         </div>
@@ -173,12 +162,13 @@ export default function CreateReportPage() {
             <option value="sedang">Sedang</option>
             <option value="rendah">Rendah</option>
           </select>
-        </div>            
+        </div>
+
         <button
           type="submit"
           className="bg-cyan-600 hover:bg-cyan-700 text-white py-2 px-4 rounded-lg w-full"
         >
-          Kirim Laporan
+          Tambahkan
         </button>
       </form>
     </div>

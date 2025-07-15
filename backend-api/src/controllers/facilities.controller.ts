@@ -62,3 +62,29 @@ export async function deleteFacilitiesController(req: Request, res: Response<Res
       return handlerAnyError(error, res)
   }
 }
+
+export async function assignFacilitiesController(req: Request, res: Response<ResponseApiType>) {
+  try {
+    const { id_facilities } = req.params;
+    const fasilId = Number(id_facilities);
+
+    if (isNaN(fasilId)) {
+      return res.status(400).json({
+        success: false,
+        message: "ID fasilitas tidak valid",
+      });
+    }
+
+    const teknisiId = 1; // ID teknisi default
+
+    const assignedFacility = await assignFacilitiesService(fasilId, teknisiId);
+
+    return res.status(200).json({
+      message: "Fasilitas berhasil ditugaskan ke teknisi.",
+      success: true,
+      data: assignedFacility,
+    });
+  } catch (error) {
+    return handlerAnyError(error, res);
+  }
+}

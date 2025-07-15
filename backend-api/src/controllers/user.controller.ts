@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { ResponseApiType } from "../types/api_types";
 import { handlerAnyError } from "../errors/api_errors";
 import { createUserServices, deleteUserServices, getAllUserService } from "../services/user.services";
+import { getTeknisiService } from "../services/user.services";
 
 export async function getAllUserController(req:Request,res:Response<ResponseApiType>) {
     try {
@@ -14,6 +15,19 @@ export async function getAllUserController(req:Request,res:Response<ResponseApiT
         })
     } catch (error) {
         return handlerAnyError(error, res)
+    }
+}
+
+export async function getTeknisiController(req: Request, res: Response<ResponseApiType>) {
+    try {
+        const teknisi = await getTeknisiService();
+        res.status(200).json({
+            message: "data teknisi berhasil diambil",
+            success: true,
+            data: teknisi
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Gagal mengambil data teknisi" });
     }
 }
 

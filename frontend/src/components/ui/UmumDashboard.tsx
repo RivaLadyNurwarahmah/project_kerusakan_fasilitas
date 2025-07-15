@@ -1,10 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { Button } from "@/components/Button";
 import Link from "next/link";
 
-export default function UserDashboard() {
+export function UserDashboard() {
   const router = useRouter();
 
   return (
@@ -44,7 +43,7 @@ export default function UserDashboard() {
             Laporkan kerusakan fasilitas kampus yang Anda temui.
           </p>         
           <Link
-            href="/umum/report/create"
+            href="/report/create"
             className="block mt-4 w-full text-center bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-md"
           >
             Laporan Baru
@@ -60,7 +59,7 @@ export default function UserDashboard() {
           </p>
           
           <Link
-            href="/umum/riwayat"
+            href="/riwayat"
             className="block mt-4 w-full text-center bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-md"
           >
             Riwayat Laporan

@@ -4,7 +4,7 @@ import { createFacilitiesController, deleteFacilitiesController, getAllFacilitie
 const facilitiesRouter = Router()
 
 facilitiesRouter.get('/', getAllFacilitiesController)
-facilitiesRouter.post('/create', createFacilitiesController)
+facilitiesRouter.post('/', createFacilitiesController)
 facilitiesRouter.delete('/:id_facilities', deleteFacilitiesController)
 
 export default facilitiesRouter

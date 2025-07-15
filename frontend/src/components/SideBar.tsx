@@ -8,10 +8,10 @@ export default function Sidebar() {
   const pathname = usePathname();
 
   const menu = [
-    { name: "Dashboard", href: "/umum/dashboard" },
-    { name: "Laporan", href: "/umum/report" },
-    { name: "Fasilitas", href: "/umum/fasilitas" },
-    { name: "Riwayat", href: "/umum/riwayat" }
+    { name: "Dashboard", href: "/dashboard" },
+    { name: "Laporan", href: "/report" },
+    { name: "Fasilitas", href: "/fasilitas" },
+    { name: "Riwayat", href: "/riwayat" }
   ];
 
   return (

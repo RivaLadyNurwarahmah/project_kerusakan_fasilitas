@@ -37,7 +37,20 @@ export default function LoginPage() {
       
       if (!data.success) throw new Error(data.message);
       localStorage.setItem("user", JSON.stringify(data.data.user))
-      router.push("/umum/dashboard"); 
+
+      const user = data.data.user
+      
+      if( user.peran === "teknisi" ) {
+        router.push("/teknisi/dashboard");
+        localStorage.setItem("token", data.data.token);
+      }else if( user.peran === "umum" ) {
+        localStorage.setItem("token", data.data.token);
+        router.push("/umum/dashboard");
+      }else if( user.peran === "admin" ) {
+        localStorage.setItem("token", data.data.token);
+        router.push("/admin/dashboard");  
+      }
+
     } catch (err: any) {
       setError(err.message);
     }

@@ -52,3 +52,13 @@ export async function updateFacilitiesServices(
   });
 }
 
+export async function assignFacilitiesService(id: number, teknisiId: number) {
+  return await prisma.facilities.update({
+    where: { id },
+    data: {
+      teknisi_id: teknisiId,
+      status: "assigned",
+    },
+  });
+}
+

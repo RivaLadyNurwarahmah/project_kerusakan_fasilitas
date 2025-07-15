@@ -35,12 +35,6 @@ export default function ReportListPage() {
           <h1 className="text-2xl font-bold text-cyan-800">
             Daftar Laporan Fasilitas
           </h1>
-          <button
-            onClick={() => router.push("/umum/report/create")}
-            className="bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg shadow-md transition"
-          >
-            Buat Laporan Baru
-          </button>
         </div>
 
         {reports.length === 0 ? (
@@ -57,6 +51,7 @@ export default function ReportListPage() {
                   <th className="px-4 py-3">Tanggal</th>
                   <th className="px-4 py-3">Status</th>
                   <th className="px-4 py-3">Gambar</th>
+                  <th className="px-4 py-3">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
@@ -99,6 +94,45 @@ export default function ReportListPage() {
                       ) : (
                         <span className="text-gray-400 italic">Tidak ada</span>
                       )}
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="flex space-x-2">
+                        {/* Tombol Delete */}
+                        <button
+                          onClick={async () => {
+                            const confirm = window.confirm(
+                              "Yakin ingin menghapus laporan ini?"
+                            );
+                            if (confirm) {
+                              try {
+                                const res = await fetch(
+                                  `http://localhost:1212/report/${report.id_report}`,
+                                  {
+                                    method: "DELETE",
+                                  }
+                                );
+                                const data = await res.json();
+                                if (data.success) {
+                                  // Perbarui list fasilitas setelah delete
+                                  setReports((prev) =>
+                                    prev.filter(
+                                      (item) =>
+                                        item.id_report !== report.id_report
+                                    )
+                                  );
+                                } else {
+                                  alert(data.message || "Gagal menghapus data");
+                                }
+                              } catch (err) {
+                                alert("Terjadi kesalahan saat menghapus data");
+                              }
+                            }
+                          }}
+                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs font-medium"
+                        >
+                          Hapus
+                        </button>                        
+                      </div>
                     </td>
                   </tr>
                 ))}
