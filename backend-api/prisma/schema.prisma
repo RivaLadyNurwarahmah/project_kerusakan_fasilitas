@@ -13,30 +13,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum role{
+enum role {
   admin
   teknisi
   umum
 }
 
-model User{
-  id_user Int @id @default(autoincrement())
+model User {
+  id_user       Int    @id @default(autoincrement())
   nama_pengguna String
-  sandi String
-  email String @unique
-  peran role  
+  sandi         String
+  email         String @unique
+  peran         role   @default(umum)
 
-  reports Report[] //satu user dapat membuat banyak laporan
-  reportLog ReportLog[] //satu user dapat melihat banyak report log
+  reports         Report[] //satu user dapat membuat banyak laporan
+  assignedReports Report[]    @relation("TeknisiLaporan")
+  reportLog       ReportLog[] //satu user dapat melihat banyak report log
 }
 
-enum prioritas_laporan{
-  urgensi
-  sedang
-  rendah
-}
-
-enum jenis_fasilitas{
+enum jenis_fasilitas {
   elektronik
   non_elektronik
   kebersihan
@@ -44,46 +39,48 @@ enum jenis_fasilitas{
   lainnya
 }
 
-model Facilities{
-  id_facilities Int @id @default(autoincrement())  
-  nama String
-  kode String
-  lokasi String
-  jenis jenis_fasilitas
-  deskripsi String
-  prioritas prioritas_laporan
+model Facilities {
+  id_facilities Int             @id @default(autoincrement())
+  nama          String
+  kode          String
+  lokasi        String
+  jenis         jenis_fasilitas
+  deskripsi     String
 
   reports Report[] //satu fasilitas bisa mendapat banyak laporan
 }
 
-enum status_laporan{
+enum status_laporan {
   diverifikasi
   diproses
   dilaporkan
 }
 
-model Report{
-  id_report Int @id @default(autoincrement())
-  id_pengguna Int
-  id_fasilitas Int
-  deskripsi String
-  status status_laporan @default(dilaporkan)
-  tanggal_laporan DateTime  
-  gambar String?
+model Report {
+  id_report       Int            @id @default(autoincrement())
+  id_pengguna     Int
+  id_fasilitas    Int
+  deskripsi       String
+  status          status_laporan @default(dilaporkan)
+  prioritas       String         @default("rendah")
+  tanggal_laporan DateTime
+  gambar          String?
+  id_teknisi      Int?
 
-  pengguna User @relation(fields: [id_pengguna], references: [id_user], onDelete: Cascade)
-  fasilitas Facilities @relation(fields: [id_fasilitas], references: [id_facilities], onDelete: Cascade)
-  reportLog ReportLog[]  //satu laporan dapat memiliki banyak report log
+  pengguna  User        @relation(fields: [id_pengguna], references: [id_user], onDelete: Cascade)
+  teknisi   User?       @relation("TeknisiLaporan", fields: [id_teknisi], references: [id_user])
+  fasilitas Facilities  @relation(fields: [id_fasilitas], references: [id_facilities], onDelete: Cascade)
+  reportLog ReportLog[] //satu laporan dapat memiliki banyak report log
 }
 
-model ReportLog{
-  id_report_log Int @id @default(autoincrement())
-  id_laporan Int
-  id_pengguna Int
-  status String
-  diubah_pada DateTime
-  catatan String
+model ReportLog {
+  id_report_log Int      @id @default(autoincrement())
+  id_laporan    Int
+  id_pengguna   Int
+  status        String
+  diubah_pada   DateTime
+  catatan       String
 
-  laporan Report @relation(fields: [id_laporan], references: [id_report], onDelete: Cascade)
-  pengguna User @relation(fields: [id_pengguna], references: [id_user], onDelete: Cascade)
+  laporan  Report @relation(fields: [id_laporan], references: [id_report], onDelete: Cascade)
+  pengguna User   @relation(fields: [id_pengguna], references: [id_user], onDelete: Cascade)
 }

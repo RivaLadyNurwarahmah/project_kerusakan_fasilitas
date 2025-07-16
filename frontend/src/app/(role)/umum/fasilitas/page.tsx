@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { getFacilities } from "@/api/facilities";
 
 type Facilities = {
   id_facilities: number;
@@ -18,12 +19,16 @@ export default function FacilitiesListPage() {
   const router = useRouter();
 
   useEffect(() => {
-    fetch("http://localhost:1212/facilities")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) setFacilities(data.data);
-      })
-      .catch((err) => console.error(err));
+    const fetch = async () => {
+      try {
+        const data = await getFacilities()
+        setFacilities(data)
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetch()
   }, []);
 
   return (
@@ -60,13 +65,12 @@ export default function FacilitiesListPage() {
               </p>
               <div className="mt-2">
                 <span
-                  className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                    facility.prioritas === "urgensi"
+                  className={`px-2 py-1 rounded-full text-xs font-semibold ${facility.prioritas === "urgensi"
                       ? "bg-red-100 text-red-700"
                       : facility.prioritas === "sedang"
-                      ? "bg-yellow-100 text-yellow-800"
-                      : "bg-gray-200 text-gray-800"
-                  }`}
+                        ? "bg-yellow-100 text-yellow-800"
+                        : "bg-gray-200 text-gray-800"
+                    }`}
                 >
                   Prioritas: {facility.prioritas}
                 </span>

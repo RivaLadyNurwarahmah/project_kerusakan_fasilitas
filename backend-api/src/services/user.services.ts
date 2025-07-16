@@ -23,40 +23,47 @@ export async function getAllUserService() {
 }
 
 export async function getTeknisiService() {
-    return await prisma.user.findMany({
-        where: {
-            peran: "teknisi"
-        },
-        include: {
-            reports: true,
-            reportLog: true
-        }
-    });
+  return await prisma.user.findMany({
+    where: {
+      peran: "teknisi"
+    },
+    include: {
+      reports: true,
+      reportLog: true
+    }
+  });
 }
 
-export async function createUserServices(data: {  
+export async function createUserServices(data: {
   nama_pengguna: string,
   sandi: string,
   email: string,
   peran: $Enums.role
 }) {
+  const hashedPassword = await hashing(data.sandi);
+  if (!hashedPassword) {
+    throw new Error("Gagal melakukan hashing kata sandi.");
+  }
   return prisma.user.create({
-    data,
+    data: {
+      ...data,
+      sandi: hashedPassword,
+    },
   });
 }
 
 export async function getUserByEmail(email: string) {
   const user = await prisma.user.findFirst({
-    where:{email},
+    where: { email },
   });
 
-  if(!email){
+  if (!email) {
     throw new AppError("email tidak ditemukan");
   }
   return user
 }
 
-export async function deleteUserServices(id_user: number){
+export async function deleteUserServices(id_user: number) {
   return prisma.user.delete({
     where: {
       id_user: id_user
@@ -64,22 +71,26 @@ export async function deleteUserServices(id_user: number){
   });
 }
 
-// export async function updateUserServices(
-//   id_user: number,
-//   data: {
-//     nama_pengguna: string,
-//     sandi?: string | null,
-//     email: string,
-//     peran: $Enums.role
-// }){
-//   let updateData = {...data}
+export async function updateUserServices(
+  id_user: number,
+  data: {
+    nama_pengguna: string,
+    sandi?: string | null,
+    email: string,
+    peran: $Enums.role
+  }) {
+  const updateData: any = {
+    nama_pengguna: data.nama_pengguna,
+    email: data.email,
+    peran: data.peran,
+  };
 
-//   if(data.sandi){
-//     updateData.sandi = await hashing(data.sandi);
-//   }
-  
-//   return prisma.user.update({
-//     where: {id_user},
-//     data: updateData
-//   });
-// }
+  if (data.sandi) {
+    updateData.sandi = await hashing(data.sandi);
+  }
+
+  return prisma.user.update({
+    where: { id_user },
+    data: updateData
+  });
+}

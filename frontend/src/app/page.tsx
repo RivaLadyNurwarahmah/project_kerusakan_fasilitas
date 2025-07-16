@@ -1,60 +1,93 @@
-'use client'
+'use client';
 
-import Link from 'next/link'
-import { Button } from '@/components/Button'
+import Link from 'next/link';
+import { ArrowRight, ShieldCheck, Zap, MessageSquare } from 'lucide-react';
 
 export default function LandingPage() {
   return (
-    <div className="min-h-screen bg-cyan-50">
+    <div className="bg-white text-gray-800">
+      {/* Header */}
+      <header className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-sm shadow-sm z-50">
+        <div className="container mx-auto px-6 py-4 flex justify-between items-center">
+          <h1 className="text-2xl font-bold text-cyan-600">FasilitasApp</h1>
+          <nav className="space-x-4">
+            <Link href="/login" className="text-gray-600 hover:text-cyan-600">Login</Link>
+            <Link href="/register" className="bg-cyan-600 text-white px-4 py-2 rounded-lg hover:bg-cyan-700">
+              Register
+            </Link>
+          </nav>
+        </div>
+      </header>
+
       {/* Hero Section */}
-      <section className="flex flex-col items-center justify-center text-center py-20 px-6">
-        <h1 className="text-4xl sm:text-5xl font-bold text-cyan-700 mb-4">
-          Sistem Pelaporan Kerusakan Fasilitas Kampus
-        </h1>
-        <p className="text-lg text-cyan-900 max-w-2xl mb-6">
-          Mudahkan pelaporan kerusakan fasilitas kampus dengan sistem digital yang cepat, efisien, dan transparan.
-        </p>
-        <div className="flex gap-4">
-          <Link href="/login">
-            <Button className="bg-cyan-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl shadow-md">
-              Masuk
-            </Button>
-          </Link>
-          <Link href="/register">
-            <Button className="bg-cyan-600 hover:bg-blue-700 text-white px-6 py-2 rounded-xl shadow-md">
-              Daftar
-            </Button>
+      <section className="pt-32 pb-20 text-center bg-gray-50">
+        <div className="container mx-auto px-6">
+          <h2 className="text-4xl md:text-6xl font-bold text-gray-900 mb-4">
+            Jaga Fasilitas Kampus, Laporkan Kerusakan.
+          </h2>
+          <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-8">
+            Sistem pelaporan kerusakan fasilitas yang cepat, mudah, dan transparan. Bantu kami menciptakan lingkungan belajar yang lebih baik.
+          </p>
+          <Link href="/register" className="bg-cyan-600 text-white px-8 py-3 rounded-lg font-semibold text-lg hover:bg-cyan-700 inline-flex items-center">
+            Lapor Sekarang <ArrowRight className="ml-2" />
           </Link>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="bg-white py-16 px-6">
-        <div className="max-w-6xl mx-auto">
-          <h2 className="text-3xl font-bold text-cyan-700 text-center mb-12">
-            Fitur Unggulan
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
-            <div className="p-6 rounded-xl shadow-md bg-cyan-50">
-              <h3 className="text-xl font-semibold text-cyan-800 mb-2">Laporan Cepat</h3>
-              <p className="text-sm text-blue-900">Laporkan kerusakan fasilitas kampus hanya dalam beberapa klik.</p>
+      <section className="py-20">
+        <div className="container mx-auto px-6 text-center">
+          <h3 className="text-3xl font-bold mb-12">Kenapa Memilih Kami?</h3>
+          <div className="grid md:grid-cols-3 gap-12">
+            <div className="feature-card">
+              <Zap size={40} className="text-cyan-600 mb-4" />
+              <h4 className="text-xl font-semibold mb-2">Cepat & Efisien</h4>
+              <p>Laporkan kerusakan dalam hitungan detik melalui antarmuka yang intuitif.</p>
             </div>
-            <div className="p-6 rounded-xl shadow-md bg-cyan-50">
-              <h3 className="text-xl font-semibold text-cyan-800 mb-2">Notifikasi Status</h3>
-              <p className="text-sm text-blue-900">Dapatkan pembaruan langsung tentang status laporan Anda.</p>
+            <div className="feature-card">
+              <ShieldCheck size={40} className="text-cyan-600 mb-4" />
+              <h4 className="text-xl font-semibold mb-2">Transparan</h4>
+              <p>Pantau status laporan Anda secara real-time dari awal hingga selesai.</p>
             </div>
-            <div className="p-6 rounded-xl shadow-md bg-cyan-50">
-              <h3 className="text-xl font-semibold text-cyan-800 mb-2">Akses Mudah</h3>
-              <p className="text-sm text-blue-900">Akses sistem kapan saja dan di mana saja dengan perangkat Anda.</p>
+            <div className="feature-card">
+              <MessageSquare size={40} className="text-cyan-600 mb-4" />
+              <h4 className="text-xl font-semibold mb-2">Komunikasi Langsung</h4>
+              <p>Dapatkan feedback dan catatan langsung dari teknisi yang menangani.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* How it Works Section */}
+      <section className="py-20 bg-gray-50">
+        <div className="container mx-auto px-6 text-center">
+          <h3 className="text-3xl font-bold mb-12">Cara Kerja</h3>
+          <div className="grid md:grid-cols-3 gap-8">
+            <div>
+              <div className="text-4xl font-bold text-cyan-200 mb-2">1</div>
+              <h4 className="text-xl font-semibold mb-2">Laporkan</h4>
+              <p>Ambil foto, isi deskripsi singkat, dan kirim laporan Anda.</p>
+            </div>
+            <div>
+              <div className="text-4xl font-bold text-cyan-200 mb-2">2</div>
+              <h4 className="text-xl font-semibold mb-2">Proses</h4>
+              <p>Laporan diverifikasi dan ditugaskan ke teknisi yang tepat.</p>
+            </div>
+            <div>
+              <div className="text-4xl font-bold text-cyan-200 mb-2">3</div>
+              <h4 className="text-xl font-semibold mb-2">Selesai</h4>
+              <p>Anda akan diberi notifikasi saat kerusakan telah diperbaiki.</p>
             </div>
           </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="bg-cyan-700 text-white text-center py-6">
-        <p className="text-sm">&copy; 2025 Sistem Pelaporan Fasilitas Kampus. All rights reserved.</p>
+      <footer className="bg-gray-800 text-white py-8">
+        <div className="container mx-auto px-6 text-center">
+          <p>&copy; 2025 FasilitasApp. All rights reserved.</p>
+        </div>
       </footer>
     </div>
-  )
+  );
 }

@@ -1,58 +1,91 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from "react";
-import DashboardCard from "@/components/DashboardCard";
-import FacilityChart from "@/components/FacilityChart";
-import { Wrench, FileText, Building2, UserCircle } from "lucide-react";
+import { useEffect, useState } from 'react';
+import { getAssignedReports } from '@/api/reports';
+import { List, Wrench, CheckCircle } from 'lucide-react';
+import Link from 'next/link';
+import { StatCard } from '@/components/ui/StatCard';
 
-interface ChartData {
-  name: string;
-  reports: number;
+interface Report {
+  id_report: number;
+  deskripsi: string;
+  status: string;
+  tanggal_laporan: string;
+  fasilitas: {
+    nama: string;
+    lokasi: string;
+  };
 }
 
-export default function DashboardPage() {
-  const [totalLaporan, setTotalLaporan] = useState(0);
-  const [fasilitasAktif, setFasilitasAktif] = useState(0);
-  const [laporanDiproses, setLaporanDiproses] = useState(0);
-  const [namaTeknisi, setNamaTeknisi] = useState("Loading...");
-  const [chartData, setChartData] = useState<ChartData[]>([]);
+export default function TeknisiDashboard() {
+  const [reports, setReports] = useState<Report[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchStats() {
+    const fetchAssignedReports = async () => {
       try {
-        const res = await fetch("http://localhost:1212/report/statsistics");
-        const data = await res.json();
-
-        console.log(data);
-        
-
-        setTotalLaporan(data.totalLaporan);
-        setFasilitasAktif(data.fasilitasAktif);
-        setLaporanDiproses(data.laporanDiproses);
-        setNamaTeknisi(data.teknisi?.nama_pengguna ?? "Tidak diketahui");
-        setChartData(data.chartData ?? []);
-      } catch (error) {
-        console.error("Gagal fetch data dashboard:", error);
+        // This service needs to be created in the frontend api
+        const assignedReports = await getAssignedReports();
+        setReports(assignedReports);
+      } catch (err) {
+        setError("Gagal memuat laporan yang ditugaskan.");
+        console.error(err);
+      } finally {
+        setLoading(false);
       }
-    }
-
-    fetchStats();
+    };
+    fetchAssignedReports();
   }, []);
 
-  return (
-    <main className="p-6 bg-gray-100 min-h-screen">
-      <h1 className="text-2xl font-bold mb-4">Dashboard Teknisi</h1>
+  const stats = {
+    total: reports.length,
+    diproses: reports.filter(r => r.status === 'diproses').length,
+    selesai: reports.filter(r => r.status === 'diverifikasi').length,
+  };
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-        <DashboardCard title="Total Laporan" value={totalLaporan} icon={FileText} />
-        <DashboardCard title="Fasilitas Aktif" value={fasilitasAktif} icon={Building2} color="bg-green-600" />
-        <DashboardCard title="Laporan Diproses" value={laporanDiproses} icon={Wrench} color="bg-yellow-500" />
-        <DashboardCard title="Profil" value={namaTeknisi} icon={UserCircle} color="bg-indigo-600" />
+  if (loading) {
+    return <div className="flex justify-center items-center h-screen">Memuat data...</div>;
+  }
+
+  if (error) {
+    return <div className="flex justify-center items-center h-screen text-red-500">{error}</div>;
+  }
+
+  return (
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <h1 className="text-3xl font-bold text-gray-800 mb-8">Dashboard Teknisi</h1>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <StatCard title="Total Tugas" value={stats.total} icon={List} color="bg-blue-500" />
+        <StatCard title="Sedang Dikerjakan" value={stats.diproses} icon={Wrench} color="bg-orange-500" />
+        <StatCard title="Tugas Selesai" value={stats.selesai} icon={CheckCircle} color="bg-green-500" />
       </div>
 
-      <FacilityChart
-       data={chartData}
-        />
-    </main>
+      <div className="bg-white p-6 rounded-2xl shadow-md">
+        <h2 className="text-xl font-bold text-gray-800 mb-4">Daftar Tugas Terbaru</h2>
+        <div className="space-y-4">
+          {reports.slice(0, 5).map(report => (
+            <Link
+              className="block p-4 border rounded-lg hover:bg-gray-50 transition-colors"
+              href={`/teknisi/report/${report.id_report}`} key={report.id_report}>
+              <div className="flex justify-between items-center">
+                <div>
+                  <p className="font-semibold">{report.fasilitas.nama} - {report.fasilitas.lokasi}</p>
+                  <p className="text-sm text-gray-600">{report.deskripsi}</p>
+                </div>
+                <span className={`px-3 py-1 text-xs font-semibold rounded-full ${report.status === 'diproses' ? 'bg-yellow-100 text-yellow-800' : 'bg-green-100 text-green-800'
+                  }`}>
+                  {report.status}
+                </span>
+              </div>
+            </Link>
+          ))}
+          {reports.length === 0 && (
+            <p className="text-gray-500">Tidak ada tugas yang ditugaskan saat ini.</p>
+          )}
+        </div>
+      </div>
+    </div>
   );
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { getReports, updateReportStatus } from '@/lib/api/reports';
+import { getReportsByStatus, updateReportStatus } from '@/api/reports';
 
 interface Report {
   id_report: number;
@@ -30,7 +30,7 @@ export default function ReportTable() {
 
   const fetchReports = async () => {
     try {
-      const data = await getReports();
+      const data = await getReportsByStatus('dilaporkan');
       setReports(data);
     } catch (error) {
       console.error('Error fetching reports:', error);
@@ -97,13 +97,12 @@ export default function ReportTable() {
               </td>
               <td className="px-6 py-4 whitespace-nowrap">
                 <span
-                  className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                    report.status === 'diverifikasi'
-                      ? 'bg-green-100 text-green-800'
-                      : report.status === 'diproses'
+                  className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${report.status === 'diverifikasi'
+                    ? 'bg-green-100 text-green-800'
+                    : report.status === 'diproses'
                       ? 'bg-yellow-100 text-yellow-800'
                       : 'bg-gray-100 text-gray-800'
-                  }`}
+                    }`}
                 >
                   {report.status}
                 </span>

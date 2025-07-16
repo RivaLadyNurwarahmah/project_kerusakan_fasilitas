@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { createReport, getAllReports } from "@/api/reports";
 
 type Report = {
   id_report: number;
@@ -20,12 +21,16 @@ export default function ReportListPage() {
   const router = useRouter();
 
   useEffect(() => {
-    fetch("http://localhost:1212/report")
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.success) setReports(data.data);
-      })
-      .catch((err) => console.error(err));
+    const fetch = async () => {
+      try {
+        const data = await getAllReports()
+        setReports(data)
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    fetch()
   }, []);
 
   return (
@@ -66,13 +71,12 @@ export default function ReportListPage() {
               <div className="mt-2 flex items-center gap-2">
                 <span className="text-sm font-medium text-gray-600">Status:</span>
                 <span
-                  className={`px-2 py-1 rounded-full text-xs font-semibold ${
-                    report.status === "selesai"
-                      ? "bg-green-100 text-green-700"
-                      : report.status === "diproses"
+                  className={`px-2 py-1 rounded-full text-xs font-semibold ${report.status === "selesai"
+                    ? "bg-green-100 text-green-700"
+                    : report.status === "diproses"
                       ? "bg-yellow-100 text-yellow-800"
                       : "bg-gray-200 text-gray-800"
-                  }`}
+                    }`}
                 >
                   {report.status}
                 </span>
