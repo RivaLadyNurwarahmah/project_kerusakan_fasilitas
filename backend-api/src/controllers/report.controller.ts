@@ -149,6 +149,7 @@ export async function getReportsByStatusController(req: Request, res: Response<R
         return handlerAnyError(error, res);
     }
 }
+
 export async function assignReportToTechnicianController(req: Request, res: Response<ResponseApiType>) {
     try {
         const { id_report } = req.params;

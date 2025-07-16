@@ -76,8 +76,7 @@ export async function getUrgentFacilitiesService() {
     }, 0);
     return { ...facility, urgencyScore: score };
   });
-
-  //implementasi bubble sort
+  
   for (let i = 0; i < facilitiesWithScores.length; i++) {
     for (let j = 0; j < (facilitiesWithScores.length - i - 1); j++) {
       if (facilitiesWithScores[j].urgencyScore < facilitiesWithScores[j + 1].urgencyScore) {
